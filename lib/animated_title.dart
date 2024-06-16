@@ -12,8 +12,8 @@ class AnimatedTitle extends StatelessWidget {
         AnimatedTextKit(
           repeatForever: true,
           animatedTexts: [
-            TypewriterAnimatedText(
-              'docGen',
+            FadeAnimatedText(
+              'BẠN MUỐN LÀM GÌ?',
               textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
