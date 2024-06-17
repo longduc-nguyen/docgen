@@ -1,13 +1,11 @@
-import 'dart:async';
-
-import 'package:docgen/animated_text_widgets.dart';
 import 'package:docgen/animated_title.dart';
 import 'package:docgen/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const ProviderScope(child:  MainApp()));
 }
 
 class MainApp extends StatefulWidget {
@@ -56,6 +54,9 @@ class _MainAppState extends State<MainApp> {
                 icon: const Icon(Icons.wb_sunny_outlined),
                 selectedIcon: const Icon(Icons.brightness_2_outlined),
               ),
+            ),
+            const SizedBox(
+              width: 10,
             )
           ],
         ),
@@ -65,65 +66,12 @@ class _MainAppState extends State<MainApp> {
               SizedBox(height: 30),
               SizedBox(height: 100, child: AnimatedTitle()),
               SizedBox(height: 30),
-              MainSearchBar()
+              MainSearchBar(),
+              ResultView(),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class RandomTextDisplay extends StatefulWidget {
-  final List<Widget> textWidgetList = [
-    const RotateTextWidget(),
-    const FadeTextWidget(),
-    const TyperTextWidget(),
-    const TypewriterTextWidget(),
-    const ScaleTextWidget(),
-    ColorizeTextWidget(),
-    const FlickerTextWidget(),
-  ];
-
-  RandomTextDisplay({super.key});
-
-  @override
-  State<RandomTextDisplay> createState() => _RandomTextDisplayState();
-}
-
-class _RandomTextDisplayState extends State<RandomTextDisplay> {
-  int currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer();
-  }
-
-  @override
-  void dispose() {
-    _stopTimer();
-    super.dispose();
-  }
-
-  void _startTimer() {
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      setState(() {
-        currentIndex = (currentIndex + 1) % widget.textWidgetList.length;
-      });
-    });
-  }
-
-  void _stopTimer() {
-    // Stop the timer if needed
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final randomText = widget.textWidgetList[currentIndex];
-
-    return Center(
-      child: randomText,
     );
   }
 }

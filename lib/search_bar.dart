@@ -1,5 +1,7 @@
-import 'package:animated_hint_textfield/animated_hint_textfield.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:docgen/riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MainSearchBar extends StatefulWidget {
   const MainSearchBar({super.key});
@@ -30,16 +32,16 @@ class _MainSearchBarState extends State<MainSearchBar> {
           leading: const Icon(Icons.search),
         );
       }, suggestionsBuilder:
-              (BuildContext context, SearchController controller) {
-        return List<ListTile>.generate(5, (int index) {
-          final String item = 'item $index';
+          (BuildContext context, SearchController controller) {
+        return List<ListTile>.generate(suggestions.length, (int index) {
+          final String item = suggestions[index];
           return ListTile(
-            title: Text(item),
-            onTap: () {
-              setState(() {
-                controller.closeView(item);
-              });
-            },
+        title: Text(item),
+        onTap: () {
+          setState(() {
+            controller.closeView(item);
+          });
+        },
           );
         });
       }),
@@ -47,41 +49,43 @@ class _MainSearchBarState extends State<MainSearchBar> {
   }
 }
 
-class SearchForm extends StatelessWidget {
-  const SearchForm({
-    super.key,
-  });
+class ResultView extends ConsumerWidget {
+
+  const ResultView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-        child: AnimatedTextField(
-      animationType: Animationtype.typer,
-      decoration: InputDecoration(
-        filled: true,
-        prefixIcon: const Icon(Icons.search),
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
+  Widget build(BuildContext context, WidgetRef ref) {
+    var searchResult = ref.watch(searchResultProvider);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          const Text(
+            'Search Result:',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Colors.white,
-            width: 2,
+          const SizedBox(height: 10),
+          AnimatedTextKit(
+            animatedTexts: [
+              TypewriterAnimatedText(
+                searchResult,
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+            ],
+            totalRepeatCount: 1,
+            pause: const Duration(milliseconds: 1000),
+            displayFullTextOnTap: true,
+            stopPauseOnTap: true,
           ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        contentPadding: const EdgeInsets.all(15),
+        ],
       ),
-      hintTexts: const [
-        'Viết đơn xin nghỉ phép',
-        'Viết đơn xin thôi việc',
-        'bruh',
-      ],
-    ));
+    );
   }
 }
+
+List<String> suggestions = [
+  'Viết đơn xin nghỉ phép',
+  'Viết đơn xin thôi việc',
+  'bruh',
+];
