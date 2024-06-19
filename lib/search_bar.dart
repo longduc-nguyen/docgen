@@ -21,7 +21,7 @@ class _MainSearchBarState extends State<MainSearchBar> {
           builder: (BuildContext context, SearchController controller) {
         return SearchBar(
           controller: controller,
-          padding: const MaterialStatePropertyAll<EdgeInsets>(
+          padding: const WidgetStatePropertyAll<EdgeInsets>(
               EdgeInsets.symmetric(horizontal: 16.0)),
           onTap: () {
             controller.openView();
